@@ -1,9 +1,9 @@
-var fs = require('fs');
-var path = require('path');
-var {ncp} = require('ncp');
-var async = require('async');
-var merge = require('merge');
-var findpath = require('nw').findpath;
+const fs = require('fs');
+const path = require('path');
+const {ncp} = require('ncp');
+const async = require('async');
+const merge = require('merge');
+const findpath = require('nw').findpath;
 
 var NodeWebkitBrowser = function(baseBrowserDecorator, args) {
   baseBrowserDecorator(this);
@@ -15,11 +15,11 @@ var NodeWebkitBrowser = function(baseBrowserDecorator, args) {
   searchPaths.unshift(process.env.NODE_PATH);
 
   this._start = function(url) {
-    var self = this;
-    var SOURCE_PATH = path.join(__dirname, 'runner.nw');
-    var STATIC_PATH = path.join(self._tempDir, 'runner.nw');
-    var INDEX_HTML = path.join(STATIC_PATH, 'index.html');
-    var PACKAGE_JSON = path.join(STATIC_PATH, 'package.json');
+    const self = this;
+    const SOURCE_PATH = path.join(__dirname, 'runner.nw');
+    const STATIC_PATH = path.join(self._tempDir, 'runner.nw');
+    const INDEX_HTML = path.join(STATIC_PATH, 'index.html');
+    const PACKAGE_JSON = path.join(STATIC_PATH, 'package.json');
 
     async.auto({
       directory: function(callback) {
@@ -29,16 +29,16 @@ var NodeWebkitBrowser = function(baseBrowserDecorator, args) {
         fs.readFile(INDEX_HTML, callback);
       }],
       'index.html:write': ['index.html:read', function(results, callback) {
-        var content = results['index.html:read'].toString().replace('%URL%', url);
+        const content = results['index.html:read'].toString().replace('%URL%', url);
         fs.writeFile(INDEX_HTML, content, callback);
       }],
       'package.json:read': ['directory', function(results, callback) {
         fs.readFile(PACKAGE_JSON, callback);
       }],
       'package.json:write': ['package.json:read', function(results, callback) {
-        var options = JSON.parse(results['package.json:read'].toString());
-        options = merge(true, options, customOptions);
-        fs.writeFile(PACKAGE_JSON, JSON.stringify(options), callback);
+        const options = JSON.parse(results['package.json:read'].toString());
+        const mergedOptions = merge(true, options, customOptions);
+        fs.writeFile(PACKAGE_JSON, JSON.stringify(mergedOptions), callback);
       }],
       'exec': ['index.html:write', 'package.json:write', function() {
         process.env.NODE_PATH = searchPaths.join(path.delimiter);
