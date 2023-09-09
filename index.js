@@ -1,6 +1,6 @@
 var fs = require('fs');
 var path = require('path');
-var ncp = require('ncp').ncp;
+var {ncp} = require('ncp');
 var async = require('async');
 var merge = require('merge');
 var findpath = require('nw').findpath;
@@ -22,25 +22,25 @@ var NodeWebkitBrowser = function(baseBrowserDecorator, args) {
     var PACKAGE_JSON = path.join(STATIC_PATH, 'package.json');
 
     async.auto({
-      'directory': function(callback) {
+      directory: function(callback) {
         ncp(SOURCE_PATH, STATIC_PATH, callback);
       },
-      'index.html:read': ['directory', function(callback) {
+      'index.html:read': ['directory', function(results, callback) {
         fs.readFile(INDEX_HTML, callback);
       }],
-      'index.html:write': ['index.html:read', function(callback, results) {
+      'index.html:write': ['index.html:read', function(results, callback) {
         var content = results['index.html:read'].toString().replace('%URL%', url);
         fs.writeFile(INDEX_HTML, content, callback);
       }],
-      'package.json:read': ['directory', function(callback) {
+      'package.json:read': ['directory', function(results, callback) {
         fs.readFile(PACKAGE_JSON, callback);
       }],
-      'package.json:write': ['package.json:read', function(callback, results) {
+      'package.json:write': ['package.json:read', function(results, callback) {
         var options = JSON.parse(results['package.json:read'].toString());
         options = merge(true, options, customOptions);
         fs.writeFile(PACKAGE_JSON, JSON.stringify(options), callback);
       }],
-      'exec': ['index.html:write', 'package.json:write', function(callback) {
+      'exec': ['index.html:write', 'package.json:write', function() {
         process.env.NODE_PATH = searchPaths.join(path.delimiter);
         self._execCommand(self._getCommand(), [STATIC_PATH]);
       }]

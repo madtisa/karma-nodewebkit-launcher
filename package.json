@@ -1,6 +1,6 @@
 {
-  "name": "karma-nodewebkit-launcher",
-  "version": "0.0.13",
+  "name": "@kp-mods/karma-nodewebkit-launcher",
+  "version": "0.0.15",
   "description": "A Karma plugin. Launcher for node-webkit.",
   "main": "index.js",
   "scripts": {
@@ -20,20 +20,19 @@
     "email": "vojta.jina@gmail.com"
   },
   "dependencies": {
-    "async": "~0.2.10",
-    "merge": ">=1.2.1"
-    "ncp": "~0.5.0",
-    "nw": "~0.18.5"
+    "async": "~3.2.4",
+    "merge": "^2.1.1",
+    "ncp": "~2.0.0",
+    "nw": "~0.53.1"
   },
   "peerDependencies": {
     "karma": ">=0.9"
   },
   "license": "MIT",
   "devDependencies": {
-    "grunt-npm": "0.0.2",
-    "grunt": "~0.4.1",
-    "grunt-bump": "0.0.7",
-    "grunt-auto-release": "0.0.2"
+    "@types/async": "^3.2.20",
+    "@types/ncp": "^2.0.5",
+    "grunt": "~1.6.1"
   },
   "contributors": [
     {
